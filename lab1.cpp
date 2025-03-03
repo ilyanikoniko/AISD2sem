@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 
+using namespace std;
 class Binary {
     private:
 
@@ -34,6 +35,29 @@ class Binary {
         return newNode;
     }
 
+    void print(Node* node) const {
+        if (node == nullptr) return;
+        print(node->left);
+        cout << node->key << " ";
+        print(node->right);
+    }
+
+    bool insert(Node*& node, int key) {
+        if (node == nullptr) {
+            node = new Node(key);
+            return true;
+        }
+        if (key == node->key)
+        {
+            return false;
+        }
+        if (key < node->key) {
+            return insert(node->left, key);
+        } else if (key > node->key) {
+            return insert(node->right, key);
+        } 
+    }
+
     public:
     Binary() : root(nullptr) {}
     ~Binary(){ clear(root);}
@@ -47,5 +71,14 @@ class Binary {
             root = copy(other.root);  
         }
         return *this;  
+    }
+
+    void print() const {
+        print(root); 
+        cout << endl;
+    }
+
+    bool insert(int key) {
+        return insert(root, key);
     }
 };
