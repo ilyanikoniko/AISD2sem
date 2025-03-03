@@ -58,6 +58,52 @@ class Binary {
         } 
     }
 
+    bool contains(Node* node, int key) const {
+        if (node == nullptr) {
+            return false;
+        }
+        if (key < node->key) {
+            return contains(node->left, key);
+        } else if (key > node->key) {
+            return contains(node->right, key);
+        }
+        return true; 
+    }
+
+    bool erase(Node*& node, int key) {
+        if (node == nullptr) {
+            return false;
+        }
+        if (key < node->key) {
+            return erase(node->left, key);
+        } else if (key > node->key) {
+            return erase(node->right, key);
+        } else {
+            if (node->left == nullptr && node->right == nullptr) {
+                delete node;
+                node = nullptr;
+            if (node->left == nullptr) {
+                Node* temp = node->right;
+                delete node;
+                node = temp;
+            } else if (node->right == nullptr) {
+                Node* temp = node->left;
+                delete node;
+                node = temp;
+            } else {
+                Node* temp = node->right;
+                while (temp->left != nullptr) {
+                    temp = temp->left;
+                }
+                node->key = temp->key;
+                erase(node->right, temp->key);
+            }
+            return true;
+        }
+    }
+}
+
+
     public:
     Binary() : root(nullptr) {}
     ~Binary(){ clear(root);}
@@ -80,5 +126,13 @@ class Binary {
 
     bool insert(int key) {
         return insert(root, key);
+    }
+
+    bool contains(int key) const {
+        return contains(root, key);
+    }
+
+    bool erase(int key) {
+        return erase(root, key);
     }
 };
