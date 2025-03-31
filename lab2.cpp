@@ -73,4 +73,39 @@ public:
         size = 0;
         delete[] table;
     }
+
+    // Оператор присваивания
+    HashTable& operator=(const HashTable& other) {
+        if (this != &other) {
+            clear();
+            delete[] table;
+            
+            capacity = other.capacity;
+            size = other.size;
+            table = new Node*[capacity]();
+            
+            for (size_t i = 0; i < capacity; ++i) {
+                Node* current = other.table[i];
+                while (current != nullptr) {
+                    insert(current->key, current->value);
+                    current = current->next;
+                }
+            }
+        }
+        return *this;
+    }
+
+    // Печать содержимого
+    void print() const {
+        for (size_t i = 0; i < capacity; ++i) {
+            cout << "table[" << i << "]: ";
+            Node* current = table[i];
+            while (current != nullptr) {
+                cout << "[" << current->key << ":" << current->value << "] ";
+                current = current->next;
+                if (current) cout << "->";
+            }
+            cout << endl;
+        }
+    }
 };
